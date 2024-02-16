@@ -1,5 +1,10 @@
 import { fork, allSettled } from "effector";
-import { initAnalyticsFx, sendDataToAnalytics, sendEventFx } from "./analytics";
+import {
+  analyticsDomain,
+  initAnalyticsFx,
+  sendDataToAnalytics,
+  sendEventFx,
+} from "./analytics";
 import { AnalyticsEventTypes } from "../../shared/types/analytics";
 
 describe("analytics", () => {
@@ -26,6 +31,36 @@ describe("analytics", () => {
       params: TEST_EVENT,
     });
     // check event sent
+    expect(sendEventMock).toHaveBeenCalledTimes(1);
+    expect(sendEventMock).toHaveBeenCalledWith(TEST_EVENT);
+  });
+
+  test("should send events only after initializtion", async () => {
+    const sendEventMock = jest.fn();
+
+    const TEST_EVENT = { name: AnalyticsEventTypes.FORM_SHOWN, payload: {} };
+
+    const scope = fork({
+      handlers: new Map<any, any>([
+        [initAnalyticsFx, jest.fn()],
+        [sendEventFx, sendEventMock],
+      ]),
+    });
+
+    await allSettled(sendDataToAnalytics, {
+      scope,
+      params: TEST_EVENT,
+    });
+
+    expect(sendEventMock).not.toHaveBeenCalled();
+
+    await allSettled(initAnalyticsFx, { scope });
+
+    expect(sendEventMock).toHaveBeenCalledTimes(1);
+    expect(sendEventMock).toHaveBeenCalledWith(TEST_EVENT);
+
+    await allSettled(initAnalyticsFx, { scope });
+
     expect(sendEventMock).toHaveBeenCalledTimes(1);
     expect(sendEventMock).toHaveBeenCalledWith(TEST_EVENT);
   });
