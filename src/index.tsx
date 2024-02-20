@@ -1,5 +1,8 @@
 import ReactDOM from "react-dom/client";
 import { SearchForm } from "./features/search";
+import { initAnalyticsFx } from "./features/analytics";
+
+initAnalyticsFx();
 
 const Application = () => {
   return (
@@ -8,4 +11,5 @@ const Application = () => {
     </>
   );
 };
+
 ReactDOM.createRoot(document.getElementById("root")!).render(<Application />);

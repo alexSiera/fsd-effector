@@ -1,1 +1,1 @@
-export { sendDataToAnalytics } from "./analytics";
+export { sendDataToAnalytics, initAnalyticsFx } from "./analytics";

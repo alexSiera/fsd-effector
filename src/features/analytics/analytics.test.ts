@@ -1,10 +1,5 @@
 import { fork, allSettled } from "effector";
-import {
-  analyticsDomain,
-  initAnalyticsFx,
-  sendDataToAnalytics,
-  sendEventFx,
-} from "./analytics";
+import { initAnalyticsFx, sendDataToAnalytics, sendEventFx } from "./analytics";
 import { AnalyticsEventTypes } from "../../shared/types/analytics";
 
 describe("analytics", () => {
